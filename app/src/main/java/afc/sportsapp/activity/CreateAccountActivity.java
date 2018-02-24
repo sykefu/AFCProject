@@ -4,8 +4,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import afc.sportsapp.R;
 
-public class CreateAccountActivity extends AppCompatActivity {
 
+public class CreateAccountActivity extends AppCompatActivity {
+    //TODO: fill with stuff
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
