@@ -22,12 +22,17 @@ public class WorkoutActivity extends AppCompatActivity {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
-              /*  case R.id.navigation_home:
+               case R.id.navigation_workout:
                     return true;
-                case R.id.navigation_dashboard:
+                case R.id.navigation_program:
                     return true;
-                case R.id.navigation_notifications:
-                    return true;*/
+                case R.id.navigation_challenge:
+                    return true;
+                case R.id.navigation_stats:
+                    return true;
+                case R.id.navigation_profile:
+                    startActivity(new Intent(WorkoutActivity.this, ProfileActivity.class));
+                    return true;
             }
             return false;
         }

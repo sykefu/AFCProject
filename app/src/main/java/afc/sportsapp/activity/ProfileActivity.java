@@ -1,5 +1,6 @@
 package afc.sportsapp.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -22,12 +23,17 @@ public class ProfileActivity extends AppCompatActivity {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
-                /*case R.id.navigation_home:
+                case R.id.navigation_workout:
+                    startActivity(new Intent(ProfileActivity.this, WorkoutActivity.class));
                     return true;
-                case R.id.navigation_dashboard:
+                case R.id.navigation_program:
                     return true;
-                case R.id.navigation_notifications:
-                    return true;*/
+                case R.id.navigation_challenge:
+                    return true;
+                case R.id.navigation_stats:
+                    return true;
+                case R.id.navigation_profile:
+                    return true;
             }
             return false;
         }
@@ -37,6 +43,11 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        //TODO : select right menu button
+        BottomNavigationView bottomNavigationView;
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        bottomNavigationView.setSelectedItemId(R.id.navigation_profile);
+
         LoadProfile();
 
         mTextMessage = (TextView) findViewById(R.id.message);
