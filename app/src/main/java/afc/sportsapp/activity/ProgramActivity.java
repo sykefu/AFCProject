@@ -5,14 +5,24 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.util.AttributeSet;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
+import afc.sportsapp.Communication.ProgramQuery;
 import afc.sportsapp.R;
+import afc.sportsapp.model.Program;
 
 public class ProgramActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
+    private ArrayList<Program> programList;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -48,10 +58,27 @@ public class ProgramActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigationView;
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
         bottomNavigationView.setSelectedItemId(R.id.navigation_program);
+        //get program list
+        Programs();
 
         mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+    }
+
+    private void Programs(){
+        ProgramQuery aQuery = new ProgramQuery();
+        programList = aQuery.getPrograms();
+        LinearLayout ll = findViewById(R.id.ProgramList);
+        for(int i = 0; i < programList.size(); i++){
+            Button b = new Button(ProgramActivity.this);
+            b.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            b.setText(programList.get(i).getName());
+            b.setId(i);
+            ll.addView(b);
+
+        }
+
     }
 
 }

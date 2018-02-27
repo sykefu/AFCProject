@@ -8,12 +8,12 @@
 
     <item
         android:id="@+id/navigation_program"
-        android:icon="@drawable/ic_layers_black_24dp"
+        android:icon="@drawable/ic_format_list_bulleted_black_24dp"
         android:title="@string/title_program" />
 
     <item
         android:id="@+id/navigation_challenge"
-        android:icon="@drawable/ic_fitness_center_black_24dp"
+        android:icon="@drawable/Laurier"
         android:title="@string/title_challenge" />
 
     <item

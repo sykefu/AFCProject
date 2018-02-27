@@ -7,8 +7,8 @@ import java.util.ArrayList;
  * Group AFC.
  */
 
-public class CreateAccountQuery implements Queryable {
-    @Override
+public class CreateAccountQuery{
+
     public ArrayList<String> getData() {
         return null;
     }

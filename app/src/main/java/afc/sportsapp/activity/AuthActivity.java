@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import afc.sportsapp.R;
+import afc.sportsapp.auth.NormalAuth;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -63,6 +64,8 @@ public class AuthActivity extends AppCompatActivity implements LoaderCallbacks<C
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    //placeholder
+    private NormalAuth aNormalAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
