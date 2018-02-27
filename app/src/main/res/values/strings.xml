@@ -16,8 +16,10 @@
     </string>
     <string name="title_activity_auth">Sign in</string>
     <string name="title_activity_profile">ProfileActivity</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_challenge">Défis</string>
+    <string name="title_workout">Entrainement</string>
+    <string name="title_program">Programme</string>
+    <string name="title_profile">Profil</string>
+    <string name="title_stats">Statistiques</string>
     <string name="title_activity_workout">WorkoutActivity</string>
 </resources>
