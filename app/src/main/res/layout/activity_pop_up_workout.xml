@@ -26,11 +26,31 @@
             android:text="Nom du sport" />
 
         <EditText
-            android:id="@+id/EnterSportsName"
+            android:id="@+id/EnterSportsNamePUW"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPersonName"
             tools:text="ex: Basket" />
+
+        <TextView
+            android:id="@+id/Description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Courte description (optionel)" />
+
+        <EditText
+            android:id="@+id/EnterDescription"
+            android:layout_width="match_parent"
+            android:layout_height="186dp"
+            android:ems="10"
+            android:inputType="textMultiLine" />
+
+        <Button
+            android:id="@+id/ValidateUntrackedSportButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Valider" />
+
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
