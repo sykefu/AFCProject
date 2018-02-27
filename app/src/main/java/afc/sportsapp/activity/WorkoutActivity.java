@@ -1,18 +1,18 @@
 package afc.sportsapp.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
-import afc.sportsapp.Communication.ProfileQuery;
 import afc.sportsapp.R;
 
-public class ProfileActivity extends AppCompatActivity {
+public class WorkoutActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
 
@@ -39,37 +39,23 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
-        LoadProfile();
-
+        setContentView(R.layout.activity_workout);
+         UntrackedWorkoutButtonPress();
         mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        //dunno what it does
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
     /**
-     * Loads and prints the profile based on data recovered from ProfileQuery
+     * Handles logic of UntrackedWorkoutButton and the popup linked to it
      */
-    private void LoadProfile(){
-        ArrayList<String> profileData;
-        profileData = new ProfileQuery().getData();
-        System.out.println("derp");
-        TextView aTextView;
-        aTextView = findViewById(R.id.Surname);
-        aTextView.setText(profileData.get(0));
-        aTextView = findViewById(R.id.LastName);
-        aTextView.setText(profileData.get(1));
-        aTextView = findViewById(R.id.Height);
-        aTextView.setText(profileData.get(2));
-        aTextView = findViewById(R.id.Weight);
-        aTextView.setText(profileData.get(3));
-        aTextView = findViewById(R.id.BMI);
-        float Height = Float.parseFloat(profileData.get(2));
-        float Weight = Float.parseFloat(profileData.get(3));
-        float BMI = Weight/(Height*Height);
-        aTextView.setText(Float.toString(BMI));
-        aTextView = findViewById(R.id.Email);
-        aTextView.setText(profileData.get(4));
+    private void UntrackedWorkoutButtonPress(){
+        Button b = (Button) findViewById(R.id.UntrackedWorkoutButton);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(WorkoutActivity.this, PopUpWorkoutActivity.class));
+            }
+        });
     }
 }
