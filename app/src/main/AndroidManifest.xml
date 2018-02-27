@@ -20,7 +20,7 @@
         <activity android:name=".activity.CreateAccountActivity" />
         <activity
             android:name=".activity.ProfileActivity"
-            android:label="@string/title_activity_profile"></activity>
+            android:label="@string/title_activity_profile" />
         <activity
             android:name=".activity.WorkoutActivity"
             android:label="@string/title_activity_workout">
@@ -28,7 +28,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.PopUpWorkoutActivity"></activity>
+        <activity android:name=".activity.PopUpWorkoutActivity" />
+        <activity
+            android:name=".activity.ProgramActivity"
+            android:label="@string/title_activity_program" />
+        <activity
+            android:name=".activity.StatsActivity"
+            android:label="@string/title_activity_stats" />
+        <activity
+            android:name=".activity.ChallengeActivity"
+            android:label="@string/title_activity_challenge"></activity>
     </application>
 
 </manifest>

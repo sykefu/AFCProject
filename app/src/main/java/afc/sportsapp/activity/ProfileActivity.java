@@ -27,12 +27,16 @@ public class ProfileActivity extends AppCompatActivity {
                     startActivity(new Intent(ProfileActivity.this, WorkoutActivity.class));
                     return true;
                 case R.id.navigation_program:
+                    startActivity(new Intent(ProfileActivity.this, ProgramActivity.class));
                     return true;
                 case R.id.navigation_challenge:
+                    startActivity(new Intent(ProfileActivity.this, ChallengeActivity.class));
                     return true;
                 case R.id.navigation_stats:
+                    startActivity(new Intent(ProfileActivity.this, StatsActivity.class));
                     return true;
                 case R.id.navigation_profile:
+                    startActivity(new Intent(ProfileActivity.this, ProfileActivity.class));
                     return true;
             }
             return false;
@@ -43,13 +47,12 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        //TODO : select right menu button
+        //select right menu button
         BottomNavigationView bottomNavigationView;
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
         bottomNavigationView.setSelectedItemId(R.id.navigation_profile);
 
         LoadProfile();
-
         mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         //dunno what it does
