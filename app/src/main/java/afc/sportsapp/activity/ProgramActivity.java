@@ -76,6 +76,7 @@ public class ProgramActivity extends AppCompatActivity {
             b.setText(programList.get(i).getName());
             b.setId(i);
             ll.addView(b);
+            //TODO : add listener on buttons and call popup/new activity on click to show details.
 
         }
 

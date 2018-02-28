@@ -48,6 +48,7 @@ public class StatsActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigationView;
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
         bottomNavigationView.setSelectedItemId(R.id.navigation_stats);
+        //TODO: will be started once database is setup, too long to make fake stuff here.
 
         mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
