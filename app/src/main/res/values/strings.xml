@@ -29,4 +29,9 @@
     <string name="title_activity_stats">StatsActivity</string>
     <string name="title_activity_challenge">ChallengeActivity</string>
     <string name="title_activity_gps">Map</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="action_start">Start</string>
+    <string name="action_stop">Stop</string>
 </resources>
