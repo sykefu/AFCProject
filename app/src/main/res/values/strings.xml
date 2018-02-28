@@ -28,4 +28,5 @@
     <string name="title_notifications">Notifications</string>
     <string name="title_activity_stats">StatsActivity</string>
     <string name="title_activity_challenge">ChallengeActivity</string>
+    <string name="title_activity_gps">Map</string>
 </resources>

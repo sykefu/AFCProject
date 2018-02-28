@@ -51,7 +51,8 @@ public class WorkoutActivity extends AppCompatActivity {
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
         bottomNavigationView.setSelectedItemId(R.id.navigation_workout);
 
-         UntrackedWorkoutButtonPress();
+        untrackedWorkoutButtonPress();
+        freeWorkoutButtonPress();
         mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -60,12 +61,22 @@ public class WorkoutActivity extends AppCompatActivity {
     /**
      * Handles logic of UntrackedWorkoutButton and the popup linked to it
      */
-    private void UntrackedWorkoutButtonPress(){
+    private void untrackedWorkoutButtonPress(){
         Button b = (Button) findViewById(R.id.UntrackedWorkoutButton);
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(WorkoutActivity.this, PopUpWorkoutActivity.class));
+            }
+        });
+    }
+
+    private void freeWorkoutButtonPress(){
+        Button b = (Button) findViewById(R.id.FreeWorkoutButton);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(WorkoutActivity.this, GPSActivity.class));
             }
         });
     }
