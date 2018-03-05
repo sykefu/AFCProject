@@ -7,6 +7,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
@@ -22,7 +23,6 @@ import afc.sportsapp.model.Program;
 public class ProgramActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
-    private ArrayList<Program> programList;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -68,7 +68,7 @@ public class ProgramActivity extends AppCompatActivity {
 
     private void Programs(){
         ProgramQuery aQuery = new ProgramQuery();
-        programList = aQuery.getPrograms();
+        final ArrayList<Program> programList = aQuery.getPrograms();
         LinearLayout ll = findViewById(R.id.ProgramList);
         for(int i = 0; i < programList.size(); i++){
             Button b = new Button(ProgramActivity.this);
@@ -76,8 +76,19 @@ public class ProgramActivity extends AppCompatActivity {
             b.setText(programList.get(i).getName());
             b.setId(i);
             ll.addView(b);
-            //TODO : add listener on buttons and call popup/new activity on click to show details.
 
+            //TODO : add listener on buttons and call popup/new activity on click to show details.
+            //trying
+            final int finalI = i;
+            b.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent send = new Intent(ProgramActivity.this, PopProgramActivity.class);
+                    send.putExtra("ProgramName", programList.get(finalI).getName());
+                    send.putExtra("programDescription", programList.get(finalI).getDescription());
+                    startActivity(send);
+                }
+            });
         }
 
     }
