@@ -77,14 +77,14 @@ public class ProgramActivity extends AppCompatActivity {
             b.setId(i);
             ll.addView(b);
 
-            //TODO : add listener on buttons and call popup/new activity on click to show details.
-            //trying
+
+            //Connecting to pop-up activity
             final int finalI = i;
             b.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent send = new Intent(ProgramActivity.this, PopProgramActivity.class);
-                    send.putExtra("ProgramName", programList.get(finalI).getName());
+                    send.putExtra("programName", programList.get(finalI).getName());
                     send.putExtra("programDescription", programList.get(finalI).getDescription());
                     startActivity(send);
                 }

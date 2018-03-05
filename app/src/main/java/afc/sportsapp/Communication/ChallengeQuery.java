@@ -23,7 +23,7 @@ public class ChallengeQuery {
         //dummy code for testing
         ArrayList<Challenge> al = new ArrayList<Challenge>();
         al.add(new Challenge("sprint 500m", "essayez de faire le meilleur temps !"));
-        al.add(new Challenge("Footing des potes", "qui fais 5 km le plus rapidement ?"));
+        al.add(new Challenge("Footing des potes", "qui fait 5 km le plus rapidement ?"));
         return al;
     }
 }
