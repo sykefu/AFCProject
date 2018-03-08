@@ -23,8 +23,16 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import afc.sportsapp.R;
 
@@ -37,6 +45,9 @@ public class GPSActivity extends AppCompatActivity implements LocationListener {
     private GoogleMap googleMap;
     private Chronometer chronometer;
     private Button start;
+    //private Marker marker;
+    private Polyline polyline;
+    private List<LatLng> listPoints = new ArrayList<LatLng>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,13 +95,13 @@ public class GPSActivity extends AppCompatActivity implements LocationListener {
         lm = (LocationManager) getSystemService(LOCATION_SERVICE);
 
         if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 0, this);
+            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, this);
         }
         if (lm.isProviderEnabled(LocationManager.PASSIVE_PROVIDER)) {
-            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 0, this);
+            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, this);
         }
         if (lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 0, this);
+            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, this);
         }
 
         loadMap();
@@ -126,7 +137,37 @@ public class GPSActivity extends AppCompatActivity implements LocationListener {
             public void onMapReady(GoogleMap googleMap) {
                 GPSActivity.this.googleMap = googleMap;
                 googleMap.moveCamera(CameraUpdateFactory.zoomBy(15));
+                //modifier et mettre en france
+                LatLng mapCenter = new LatLng(41.889, -87.622);
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mapCenter, 13));
                 googleMap.setMyLocationEnabled(true);
+                polyline = googleMap.addPolyline(new PolylineOptions().geodesic(true));
+                //PolylineOptions polylineOptions = new PolylineOptions();
+                //polyline = googleMap.addPolyline(polylineOptions);
+
+                //définition du marqueur qui va se positionner sur le point qu'on désire afficher
+                /*MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.title("YAOUNDE");
+                markerOptions.visible(true);
+                markerOptions.position(mapCenter);
+                markerOptions.flat(true);
+
+                //ajout du marqueur sur la carte
+                marker = googleMap.addMarker(markerOptions);*/
+                //zoom de la caméra sur la position qu'on désire afficher
+                //googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mapCenter, 16));
+                //animation le zoom toute les 2000ms
+                //googleMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
+
+                CameraPosition cameraPosition = CameraPosition.builder()
+                        .target(mapCenter)
+                        .zoom(13)
+                        .bearing(90)
+                        .build();
+
+                // Animate the change in camera view over 2 seconds
+                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition),
+                        2000, null);
             }
         });
     }
@@ -139,7 +180,18 @@ public class GPSActivity extends AppCompatActivity implements LocationListener {
         if(googleMap != null)
         {
             LatLng googleLocation = new LatLng( latitude, longitude);
-            googleMap.moveCamera(CameraUpdateFactory.newLatLng(googleLocation));
+            /*if(marker != null) {
+                marker.setPosition(googleLocation);
+                marker.setRotation(location.getBearing());
+            }*/
+
+            //zoom de la caméra sur la position qu'on désire afficher
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(googleLocation, 16));
+            listPoints.add(googleLocation);
+            polyline.setPoints(listPoints);
+            /*ArrayList pointsList = new ArrayList<LatLng>();
+            pointsList.add(googleLocation);*/
+            //polyline.setPoints(pointsList);
         }
     }
 
