@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -17,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -45,7 +47,6 @@ public class GPSActivity extends AppCompatActivity implements LocationListener {
     private GoogleMap googleMap;
     private Chronometer chronometer;
     private Button start;
-    //private Marker marker;
     private Polyline polyline;
     private List<LatLng> listPoints = new ArrayList<LatLng>();
 
@@ -69,6 +70,7 @@ public class GPSActivity extends AppCompatActivity implements LocationListener {
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 if (start.getText() == getString(R.string.action_start)) {
+                    chronometer.setBase(SystemClock.elapsedRealtime());
                     chronometer.start();
                     start.setText(getString(R.string.action_stop));
                     return;
@@ -76,10 +78,17 @@ public class GPSActivity extends AppCompatActivity implements LocationListener {
                 if (start.getText() == getString(R.string.action_stop)) {
                     chronometer.stop();
                     start.setText(getString(R.string.action_start));
+                    showElapsedTime();
                     return;
                 }
             }
         });
+    }
+
+    private void showElapsedTime() {
+        long elapsedMillis = SystemClock.elapsedRealtime() - chronometer.getBase();
+        Toast.makeText(GPSActivity.this, "Elapsed milliseconds: " + elapsedMillis,
+                Toast.LENGTH_SHORT).show();
     }
 
     private void checkPermissions() {
@@ -142,22 +151,6 @@ public class GPSActivity extends AppCompatActivity implements LocationListener {
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mapCenter, 13));
                 googleMap.setMyLocationEnabled(true);
                 polyline = googleMap.addPolyline(new PolylineOptions().geodesic(true));
-                //PolylineOptions polylineOptions = new PolylineOptions();
-                //polyline = googleMap.addPolyline(polylineOptions);
-
-                //définition du marqueur qui va se positionner sur le point qu'on désire afficher
-                /*MarkerOptions markerOptions = new MarkerOptions();
-                markerOptions.title("YAOUNDE");
-                markerOptions.visible(true);
-                markerOptions.position(mapCenter);
-                markerOptions.flat(true);
-
-                //ajout du marqueur sur la carte
-                marker = googleMap.addMarker(markerOptions);*/
-                //zoom de la caméra sur la position qu'on désire afficher
-                //googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mapCenter, 16));
-                //animation le zoom toute les 2000ms
-                //googleMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
 
                 CameraPosition cameraPosition = CameraPosition.builder()
                         .target(mapCenter)
@@ -180,18 +173,11 @@ public class GPSActivity extends AppCompatActivity implements LocationListener {
         if(googleMap != null)
         {
             LatLng googleLocation = new LatLng( latitude, longitude);
-            /*if(marker != null) {
-                marker.setPosition(googleLocation);
-                marker.setRotation(location.getBearing());
-            }*/
 
             //zoom de la caméra sur la position qu'on désire afficher
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(googleLocation, 16));
             listPoints.add(googleLocation);
             polyline.setPoints(listPoints);
-            /*ArrayList pointsList = new ArrayList<LatLng>();
-            pointsList.add(googleLocation);*/
-            //polyline.setPoints(pointsList);
         }
     }
 
