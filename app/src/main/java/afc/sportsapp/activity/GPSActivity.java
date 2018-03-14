@@ -2,20 +2,17 @@ package afc.sportsapp.activity;
 
 import android.Manifest;
 import android.app.FragmentManager;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.Toast;
@@ -24,14 +21,11 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.maps.android.SphericalUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,12 +42,15 @@ public class GPSActivity extends AppCompatActivity implements LocationListener {
     private Chronometer chronometer;
     private Button start;
     private Polyline polyline;
-    private List<LatLng> listPoints = new ArrayList<LatLng>();
+    private List<LatLng> listPoints = new ArrayList<>();
+    private boolean isStarted = false;
+    private double distanceFinal = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gps);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         this.chronometer = (Chronometer) findViewById(R.id.chronometer);
         this.start = (Button) findViewById(R.id.begin_chrono);
@@ -73,22 +70,51 @@ public class GPSActivity extends AppCompatActivity implements LocationListener {
                     chronometer.setBase(SystemClock.elapsedRealtime());
                     chronometer.start();
                     start.setText(getString(R.string.action_stop));
+                    isStarted = true;
                     return;
                 }
                 if (start.getText() == getString(R.string.action_stop)) {
                     chronometer.stop();
                     start.setText(getString(R.string.action_start));
-                    showElapsedTime();
+                    // showElapsedTime();
+                    isStarted = false;
+                    calculDistancePolyline();
                     return;
                 }
             }
         });
     }
 
+    private void calculDistancePolyline(){
+        double distanceFinal = 0;
+        if(listPoints.size()<2)
+            return;
+        for(int i=1; i<listPoints.size(); i++)
+        {
+            distanceFinal += SphericalUtil.computeDistanceBetween(listPoints.get(i-1),listPoints.get(i));
+        }
+        this.distanceFinal = distanceFinal;
+        Toast.makeText(GPSActivity.this,"Distance Parcouru : "+ distanceFinal + " m en : " + getElapsedTime() + " ms" ,Toast.LENGTH_LONG).show();
+        Toast.makeText(GPSActivity.this,"Vitesse en m/s : " + getSpeedInMpS(),Toast.LENGTH_LONG).show();
+        Toast.makeText(GPSActivity.this,"Vitesse en km/h : " + getSpeedInKMpS(),Toast.LENGTH_LONG).show();
+    }
+
     private void showElapsedTime() {
         long elapsedMillis = SystemClock.elapsedRealtime() - chronometer.getBase();
         Toast.makeText(GPSActivity.this, "Elapsed milliseconds: " + elapsedMillis,
                 Toast.LENGTH_SHORT).show();
+    }
+
+    private long getElapsedTime(){
+        return SystemClock.elapsedRealtime() - chronometer.getBase();
+    }
+
+    private double getSpeedInMpS(){
+        return distanceFinal / getElapsedTime() * 1000;
+    }
+
+    private double getSpeedInKMpS(){
+        return distanceFinal / getElapsedTime() * 1000 * 3.6;
     }
 
     private void checkPermissions() {
@@ -159,10 +185,6 @@ public class GPSActivity extends AppCompatActivity implements LocationListener {
                         .zoom(13)
                         .bearing(90)
                         .build();
-
-                // Animate the change in camera view over 2 seconds
-                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition),
-                        2000, null);
             }
         });
     }
@@ -178,8 +200,10 @@ public class GPSActivity extends AppCompatActivity implements LocationListener {
 
             //zoom de la caméra sur la position qu'on désire afficher
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(googleLocation, 16));
-            listPoints.add(googleLocation);
-            polyline.setPoints(listPoints);
+            if(isStarted) {
+                listPoints.add(googleLocation);
+                polyline.setPoints(listPoints);
+            }
         }
     }
 
@@ -192,7 +216,7 @@ public class GPSActivity extends AppCompatActivity implements LocationListener {
     public void onProviderEnabled(String s) {
         if(s.equals(lm.GPS_PROVIDER))
         {
-            Toast.makeText(GPSActivity.this, "La localisation est bien activée",Toast.LENGTH_SHORT).show();
+            Toast.makeText(GPSActivity.this, "La localisation est bien activée",Toast.LENGTH_LONG).show();
         }
 
     }
@@ -201,9 +225,13 @@ public class GPSActivity extends AppCompatActivity implements LocationListener {
     public void onProviderDisabled(String s) {
         if(s.equals(lm.GPS_PROVIDER))
         {
-            Toast.makeText(GPSActivity.this, "activez la localisation svp",Toast.LENGTH_SHORT).show();
+            Toast.makeText(GPSActivity.this, "activez la localisation svp",Toast.LENGTH_LONG).show();
         }
     }
 
-    
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    }
 }
