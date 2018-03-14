@@ -145,9 +145,11 @@ public class GPSActivity extends AppCompatActivity implements LocationListener {
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 GPSActivity.this.googleMap = googleMap;
-                googleMap.moveCamera(CameraUpdateFactory.zoomBy(15));
+                //googleMap.moveCamera(CameraUpdateFactory.zoomBy(15));
                 //modifier et mettre en france
-                LatLng mapCenter = new LatLng(41.889, -87.622);
+                LatLng mapCenter = new LatLng(48.872808, 2.33517);
+                if(lm.getLastKnownLocation(lm.GPS_PROVIDER) != null)
+                    mapCenter = new LatLng(lm.getLastKnownLocation(lm.GPS_PROVIDER).getLatitude(),lm.getLastKnownLocation(lm.GPS_PROVIDER).getLongitude());
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mapCenter, 13));
                 googleMap.setMyLocationEnabled(true);
                 polyline = googleMap.addPolyline(new PolylineOptions().geodesic(true));
@@ -188,11 +190,20 @@ public class GPSActivity extends AppCompatActivity implements LocationListener {
 
     @Override
     public void onProviderEnabled(String s) {
+        if(s.equals(lm.GPS_PROVIDER))
+        {
+            Toast.makeText(GPSActivity.this, "La localisation est bien activée",Toast.LENGTH_SHORT).show();
+        }
 
     }
 
     @Override
     public void onProviderDisabled(String s) {
-
+        if(s.equals(lm.GPS_PROVIDER))
+        {
+            Toast.makeText(GPSActivity.this, "activez la localisation svp",Toast.LENGTH_SHORT).show();
+        }
     }
+
+    
 }
