@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/AFCProject.iml" filepath="$PROJECT_DIR$/AFCProject.iml" />
       <module fileurl="file://C:\Users\ludov\AndroidStudioProjects\SportsApp\AFCProject.iml" filepath="C:\Users\ludov\AndroidStudioProjects\SportsApp\AFCProject.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SportsApp.iml" filepath="$PROJECT_DIR$/SportsApp.iml" />
       <module fileurl="file://C:\Users\soriano\AndroidStudioProjects\AFCProject\SportsApp.iml" filepath="C:\Users\soriano\AndroidStudioProjects\AFCProject\SportsApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>

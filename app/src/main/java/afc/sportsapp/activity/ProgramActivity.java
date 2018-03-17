@@ -66,8 +66,11 @@ public class ProgramActivity extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
+    /**
+     * Load programs known by the app and create buttons for the activity.
+     */
     private void Programs(){
-        ProgramQuery aQuery = new ProgramQuery();
+        ProgramQuery aQuery = new ProgramQuery(getApplicationContext());
         final ArrayList<Program> programList = aQuery.getPrograms();
         LinearLayout ll = findViewById(R.id.ProgramList);
         for(int i = 0; i < programList.size(); i++){
@@ -87,6 +90,7 @@ public class ProgramActivity extends AppCompatActivity {
                     send.putExtra("programName", programList.get(finalI).getName());
                     send.putExtra("programDescription", programList.get(finalI).getDescription());
                     startActivity(send);
+                    //recuperer le nom de l'entrainement choisis pour pouvoir le sauvegarder
                 }
             });
         }

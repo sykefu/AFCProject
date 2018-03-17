@@ -5,12 +5,21 @@ package afc.sportsapp.model;
  * Group AFC.
  */
 
+import java.util.ArrayList;
+
 /**
  * Model class, holds data relevant to programs.
  */
 public class Program {
     private String name;
     private String description;
+    private ArrayList<WorkoutGoal> goals;
+
+    public Program(String name, String description, ArrayList<WorkoutGoal> goals) {
+        this.name = name;
+        this.description = description;
+        this.goals = goals;
+    }
 
     public Program(String name, String description){
         this.name = name;

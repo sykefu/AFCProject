@@ -1,0 +1,12 @@
+Remise au sport
+Programme de remise en forme progressif pour tout le monde!
+1 18 -1
+Il s'agit de courir une minute, se reposer 2 minutes et de recommencer jusqu'a la fin.
+2 24 -1
+Meme chose que la derniere fois, 1 minute de course, 2 minutes de marche, mais plus longtemps.
+1 24 -1
+On augmente la difficultee, 2 minutes de course, 2 minutes de marche, en boucle.
+1 24 -1
+C'est partit ! 2 minutes de course, 1 minutes de marche, jusqu'a la fin !
+2 25 -1
+Comme a la guerre ! 3 minutes de course, 2 de marche et ce 5 fois !
