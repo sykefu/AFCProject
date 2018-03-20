@@ -154,13 +154,12 @@ public class GPSActivity extends AppCompatActivity implements LocationListener {
             lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, this);
         }
 
-        loadMap();
-
     }
     @Override
     protected void onResume() {
         super.onResume();
         checkPermissions();
+        loadMap();
     }
 
     @Override
@@ -187,11 +186,11 @@ public class GPSActivity extends AppCompatActivity implements LocationListener {
             public void onMapReady(GoogleMap googleMap) {
                 GPSActivity.this.googleMap = googleMap;
                 LatLng mapCenter = new LatLng(48.872808, 2.33517);
+                googleMap.setMyLocationEnabled(true);
                 if(lm.getLastKnownLocation(LocationManager.GPS_PROVIDER) != null )
                     mapCenter = new LatLng(lm.getLastKnownLocation(LocationManager.GPS_PROVIDER).getLatitude(),lm.getLastKnownLocation(LocationManager.GPS_PROVIDER).getLongitude());
                 if(currentLocation != null)
                     mapCenter = currentLocation;
-                googleMap.setMyLocationEnabled(true);
                 polyline = googleMap.addPolyline(new PolylineOptions().geodesic(true));
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mapCenter, 13));
             }
@@ -203,12 +202,12 @@ public class GPSActivity extends AppCompatActivity implements LocationListener {
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
 
+        currentLocation = new LatLng( latitude, longitude);
         if(googleMap != null)
         {
-            currentLocation = new LatLng( latitude, longitude);
 
             //zoom de la caméra sur la position qu'on désire afficher
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 16));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 13));
             if(isStarted) {
                 listPoints.add(currentLocation);
                 polyline.setPoints(listPoints);
