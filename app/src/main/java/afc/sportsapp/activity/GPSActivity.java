@@ -1,7 +1,9 @@
 package afc.sportsapp.activity;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.FragmentManager;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -44,7 +46,6 @@ public class GPSActivity extends AppCompatActivity implements LocationListener {
     private Polyline polyline;
     private List<LatLng> listPoints = new ArrayList<>();
     private boolean isStarted = false;
-    private double distanceFinal = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,27 +77,50 @@ public class GPSActivity extends AppCompatActivity implements LocationListener {
                 if (start.getText() == getString(R.string.action_stop)) {
                     chronometer.stop();
                     start.setText(getString(R.string.action_start));
-                    // showElapsedTime();
                     isStarted = false;
-                    calculDistancePolyline();
+                    afficheStat();
+                    //calculDistancePolyline();
                     return;
                 }
             }
         });
     }
 
-    private void calculDistancePolyline(){
+    private void afficheStat(){
+        // PopUp tu save the result
+        AlertDialog.Builder popUp = new AlertDialog.Builder(GPSActivity.this);
+        popUp.setTitle("Fin de la course");
+        popUp.setMessage("Distance parcourue : " + calculDistancePolyline() + " m\n"
+                + "Temps : " + getElapsedTime()/1000 + " s\n"
+                + "Vitesse : " + getSpeedInKMpS() + " Km/h\n"
+                + "voulez vous enregistrer votre parcours ?");
+        popUp.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                // User save the result
+            }
+        });
+        popUp.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                // User cancelled the dialog
+            }
+        });
+
+        popUp.show();
+    }
+    private double calculDistancePolyline(){
         double distanceFinal = 0;
         if(listPoints.size()<2)
-            return;
+            return 0;
         for(int i=1; i<listPoints.size(); i++)
         {
             distanceFinal += SphericalUtil.computeDistanceBetween(listPoints.get(i-1),listPoints.get(i));
         }
-        this.distanceFinal = distanceFinal;
-        Toast.makeText(GPSActivity.this,"Distance Parcouru : "+ distanceFinal + " m en : " + getElapsedTime() + " ms" ,Toast.LENGTH_LONG).show();
+        return distanceFinal;
+        /*Toast.makeText(GPSActivity.this,"Distance Parcouru : "+ distanceFinal + " m en : " + getElapsedTime() + " ms" ,Toast.LENGTH_LONG).show();
         Toast.makeText(GPSActivity.this,"Vitesse en m/s : " + getSpeedInMpS(),Toast.LENGTH_LONG).show();
-        Toast.makeText(GPSActivity.this,"Vitesse en km/h : " + getSpeedInKMpS(),Toast.LENGTH_LONG).show();
+        Toast.makeText(GPSActivity.this,"Vitesse en km/h : " + getSpeedInKMpS(),Toast.LENGTH_LONG).show();*/
     }
 
     private void showElapsedTime() {
@@ -110,11 +134,11 @@ public class GPSActivity extends AppCompatActivity implements LocationListener {
     }
 
     private double getSpeedInMpS(){
-        return distanceFinal / getElapsedTime() * 1000;
+        return calculDistancePolyline() / getElapsedTime() * 1000;
     }
 
     private double getSpeedInKMpS(){
-        return distanceFinal / getElapsedTime() * 1000 * 3.6;
+        return calculDistancePolyline() / getElapsedTime() * 1000 * 3.6;
     }
 
     private void checkPermissions() {
@@ -225,7 +249,17 @@ public class GPSActivity extends AppCompatActivity implements LocationListener {
     public void onProviderDisabled(String s) {
         if(s.equals(lm.GPS_PROVIDER))
         {
-            Toast.makeText(GPSActivity.this, "activez la localisation svp",Toast.LENGTH_LONG).show();
+            AlertDialog.Builder popUp = new AlertDialog.Builder(GPSActivity.this);
+            popUp.setTitle("Localisation désactivée");
+            popUp.setMessage("Votre localisation semble désactivée,\nveuillez l'activer dans les paramètres de votre téléphone SVP");
+            popUp.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    // User cancelled the dialog
+                }
+            });
+            popUp.show();
+            //Toast.makeText(GPSActivity.this, "activez la localisation svp",Toast.LENGTH_LONG).show();
         }
     }
 
