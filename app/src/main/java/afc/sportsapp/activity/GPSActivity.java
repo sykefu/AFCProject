@@ -23,7 +23,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -46,6 +45,7 @@ public class GPSActivity extends AppCompatActivity implements LocationListener {
     private Polyline polyline;
     private List<LatLng> listPoints = new ArrayList<>();
     private boolean isStarted = false;
+    private LatLng currentLocation = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +53,8 @@ public class GPSActivity extends AppCompatActivity implements LocationListener {
         setContentView(R.layout.activity_gps);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        this.chronometer = (Chronometer) findViewById(R.id.chronometer);
-        this.start = (Button) findViewById(R.id.begin_chrono);
+        this.chronometer = findViewById(R.id.chronometer);
+        this.start = findViewById(R.id.begin_chrono);
 
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -66,7 +66,6 @@ public class GPSActivity extends AppCompatActivity implements LocationListener {
 
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
                 if (start.getText() == getString(R.string.action_start)) {
                     chronometer.setBase(SystemClock.elapsedRealtime());
                     chronometer.start();
@@ -78,15 +77,13 @@ public class GPSActivity extends AppCompatActivity implements LocationListener {
                     chronometer.stop();
                     start.setText(getString(R.string.action_start));
                     isStarted = false;
-                    afficheStat();
-                    //calculDistancePolyline();
-                    return;
+                    displayStat();
                 }
             }
         });
     }
 
-    private void afficheStat(){
+    private void displayStat(){
         // PopUp tu save the result
         AlertDialog.Builder popUp = new AlertDialog.Builder(GPSActivity.this);
         popUp.setTitle("Fin de la course");
@@ -109,6 +106,7 @@ public class GPSActivity extends AppCompatActivity implements LocationListener {
 
         popUp.show();
     }
+
     private double calculDistancePolyline(){
         double distanceFinal = 0;
         if(listPoints.size()<2)
@@ -118,24 +116,17 @@ public class GPSActivity extends AppCompatActivity implements LocationListener {
             distanceFinal += SphericalUtil.computeDistanceBetween(listPoints.get(i-1),listPoints.get(i));
         }
         return distanceFinal;
-        /*Toast.makeText(GPSActivity.this,"Distance Parcouru : "+ distanceFinal + " m en : " + getElapsedTime() + " ms" ,Toast.LENGTH_LONG).show();
-        Toast.makeText(GPSActivity.this,"Vitesse en m/s : " + getSpeedInMpS(),Toast.LENGTH_LONG).show();
-        Toast.makeText(GPSActivity.this,"Vitesse en km/h : " + getSpeedInKMpS(),Toast.LENGTH_LONG).show();*/
     }
 
-    private void showElapsedTime() {
-        long elapsedMillis = SystemClock.elapsedRealtime() - chronometer.getBase();
-        Toast.makeText(GPSActivity.this, "Elapsed milliseconds: " + elapsedMillis,
-                Toast.LENGTH_SHORT).show();
-    }
 
     private long getElapsedTime(){
         return SystemClock.elapsedRealtime() - chronometer.getBase();
     }
 
-    private double getSpeedInMpS(){
+    // Can be used in the future
+    /*private double getSpeedInMpS(){
         return calculDistancePolyline() / getElapsedTime() * 1000;
-    }
+    }*/
 
     private double getSpeedInKMpS(){
         return calculDistancePolyline() / getElapsedTime() * 1000 * 3.6;
@@ -195,20 +186,14 @@ public class GPSActivity extends AppCompatActivity implements LocationListener {
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 GPSActivity.this.googleMap = googleMap;
-                //googleMap.moveCamera(CameraUpdateFactory.zoomBy(15));
-                //modifier et mettre en france
                 LatLng mapCenter = new LatLng(48.872808, 2.33517);
-                if(lm.getLastKnownLocation(lm.GPS_PROVIDER) != null)
-                    mapCenter = new LatLng(lm.getLastKnownLocation(lm.GPS_PROVIDER).getLatitude(),lm.getLastKnownLocation(lm.GPS_PROVIDER).getLongitude());
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mapCenter, 13));
+                if(lm.getLastKnownLocation(LocationManager.GPS_PROVIDER) != null )
+                    mapCenter = new LatLng(lm.getLastKnownLocation(LocationManager.GPS_PROVIDER).getLatitude(),lm.getLastKnownLocation(LocationManager.GPS_PROVIDER).getLongitude());
+                if(currentLocation != null)
+                    mapCenter = currentLocation;
                 googleMap.setMyLocationEnabled(true);
                 polyline = googleMap.addPolyline(new PolylineOptions().geodesic(true));
-
-                CameraPosition cameraPosition = CameraPosition.builder()
-                        .target(mapCenter)
-                        .zoom(13)
-                        .bearing(90)
-                        .build();
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mapCenter, 13));
             }
         });
     }
@@ -220,12 +205,12 @@ public class GPSActivity extends AppCompatActivity implements LocationListener {
 
         if(googleMap != null)
         {
-            LatLng googleLocation = new LatLng( latitude, longitude);
+            currentLocation = new LatLng( latitude, longitude);
 
             //zoom de la caméra sur la position qu'on désire afficher
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(googleLocation, 16));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 16));
             if(isStarted) {
-                listPoints.add(googleLocation);
+                listPoints.add(currentLocation);
                 polyline.setPoints(listPoints);
             }
         }
@@ -238,7 +223,7 @@ public class GPSActivity extends AppCompatActivity implements LocationListener {
 
     @Override
     public void onProviderEnabled(String s) {
-        if(s.equals(lm.GPS_PROVIDER))
+        if(s.equals(LocationManager.GPS_PROVIDER))
         {
             Toast.makeText(GPSActivity.this, "La localisation est bien activée",Toast.LENGTH_LONG).show();
         }
@@ -247,7 +232,7 @@ public class GPSActivity extends AppCompatActivity implements LocationListener {
 
     @Override
     public void onProviderDisabled(String s) {
-        if(s.equals(lm.GPS_PROVIDER))
+        if(s.equals(LocationManager.GPS_PROVIDER))
         {
             AlertDialog.Builder popUp = new AlertDialog.Builder(GPSActivity.this);
             popUp.setTitle("Localisation désactivée");
@@ -259,7 +244,6 @@ public class GPSActivity extends AppCompatActivity implements LocationListener {
                 }
             });
             popUp.show();
-            //Toast.makeText(GPSActivity.this, "activez la localisation svp",Toast.LENGTH_LONG).show();
         }
     }
 
