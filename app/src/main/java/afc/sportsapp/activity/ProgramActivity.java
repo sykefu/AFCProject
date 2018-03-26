@@ -8,8 +8,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
@@ -72,8 +75,8 @@ public class ProgramActivity extends AppCompatActivity {
     private void Programs(){
         ProgramQuery aQuery = new ProgramQuery(getApplicationContext());
         final ArrayList<Program> programList = aQuery.getPrograms();
-        LinearLayout ll = findViewById(R.id.ProgramList);
-        for(int i = 0; i < programList.size(); i++){
+        //LinearLayout ll = findViewById(R.id.ProgramList);
+        /*for(int i = 0; i < programList.size(); i++){
             Button b = new Button(ProgramActivity.this);
             b.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
             b.setText(programList.get(i).getName());
@@ -93,8 +96,25 @@ public class ProgramActivity extends AppCompatActivity {
                     //recuperer le nom de l'entrainement choisis pour pouvoir le sauvegarder
                 }
             });
+        }*/
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1);
+        for(int i = 0; i < programList.size(); i++){
+            adapter.add(programList.get(i).getName());
         }
 
+        ListView listView = findViewById(R.id.list_program);
+        listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent send = new Intent(ProgramActivity.this, PopProgramActivity.class);
+                send.putExtra("programName", programList.get(i).getName());
+                send.putExtra("programDescription", programList.get(i).getDescription());
+                startActivity(send);
+                //recuperer le nom de l'entrainement choisis pour pouvoir le sauvegarder
+            }
+        });
     }
 
 }

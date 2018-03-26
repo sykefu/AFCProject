@@ -6,6 +6,8 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -63,10 +65,16 @@ public class ProfileActivity extends AppCompatActivity {
      * Loads and prints the profile based on data recovered from ProfileQuery
      */
     private void LoadProfile(){
-        ArrayList<String> profileData;
-        profileData = new ProfileQuery().getData();
-        System.out.println("derp");
-        TextView aTextView;
+        ArrayList<String> profileData = new ProfileQuery().getData();
+        ArrayAdapter<String> profileAdapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1);
+        profileAdapter.addAll(profileData);
+        float Height = Float.parseFloat(profileData.get(2));
+        float Weight = Float.parseFloat(profileData.get(3));
+        float BMI = Weight/(Height*Height);
+        profileAdapter.add(Float.toString(BMI));
+        ListView listView = findViewById(R.id.listView);
+        listView.setAdapter(profileAdapter);
+        /*TextView aTextView;
         aTextView = findViewById(R.id.Surname);
         aTextView.setText(profileData.get(0));
         aTextView = findViewById(R.id.LastName);
@@ -81,6 +89,6 @@ public class ProfileActivity extends AppCompatActivity {
         float BMI = Weight/(Height*Height);
         aTextView.setText(Float.toString(BMI));
         aTextView = findViewById(R.id.Email);
-        aTextView.setText(profileData.get(4));
+        aTextView.setText(profileData.get(4));*/
     }
 }

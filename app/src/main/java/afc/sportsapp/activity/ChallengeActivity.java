@@ -7,8 +7,11 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 
@@ -65,7 +68,7 @@ public class ChallengeActivity extends AppCompatActivity {
     private void Challenges(){
         ChallengeQuery aQuery = new ChallengeQuery();
         final ArrayList<Challenge> challengeList = aQuery.getChallenges();
-        LinearLayout ll = findViewById(R.id.ChallengeList);
+        /*LinearLayout ll = findViewById(R.id.ChallengeList);
         for(int i = 0; i < challengeList.size(); i++){
             Button b = new Button(ChallengeActivity.this);
             b.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
@@ -86,7 +89,24 @@ public class ChallengeActivity extends AppCompatActivity {
                     startActivity(send);
                 }
             });
+        }*/
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1);
+        for(int i = 0; i < challengeList.size(); i++){
+            adapter.add(challengeList.get(i).getName());
         }
 
+        ListView listView = findViewById(R.id.list_challenge);
+        listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent send = new Intent(ChallengeActivity.this, PopChallengeActivity.class);
+                send.putExtra("challengeName", challengeList.get(i).getName());
+                send.putExtra("challengeDescription", challengeList.get(i).getDescription());
+                startActivity(send);
+            }
+        });
     }
 }
