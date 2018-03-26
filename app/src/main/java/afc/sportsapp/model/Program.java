@@ -14,11 +14,13 @@ public class Program {
     private String name;
     private String description;
     private ArrayList<WorkoutGoal> goals;
+    private int id;
 
-    public Program(String name, String description, ArrayList<WorkoutGoal> goals) {
+    public Program(String name, String description, ArrayList<WorkoutGoal> goals, int id) {
         this.name = name;
         this.description = description;
         this.goals = goals;
+        this.id = id;
     }
 
     public Program(String name, String description){
@@ -33,5 +35,9 @@ public class Program {
 
     public String getDescription() {
         return description;
+    }
+
+    public int getId() {
+        return id;
     }
 }

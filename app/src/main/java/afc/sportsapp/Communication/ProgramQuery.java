@@ -40,7 +40,8 @@ public class ProgramQuery {
         al.add(getProgram(R.raw.course_remise_au_sport));
         return al;
     }
-    private Program getProgram(int id){
+
+    public Program getProgram(int id){
         InputStream inputStream = ctx.getResources().openRawResource(id);
 
 
@@ -63,6 +64,6 @@ public class ProgramQuery {
         } catch (IOException e) {
             return null;
         }
-        return new Program(title, description, workoutGoals);
+        return new Program(title, description, workoutGoals, id);
     }
 }

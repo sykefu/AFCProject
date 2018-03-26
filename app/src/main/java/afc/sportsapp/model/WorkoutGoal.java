@@ -36,7 +36,7 @@ public class WorkoutGoal {
     /**
      * instructions for the run.
      */
-    public String instructions;
+    private String instructions;
     /**
      * distance to run in meters if specified, otherwise -1.
      */

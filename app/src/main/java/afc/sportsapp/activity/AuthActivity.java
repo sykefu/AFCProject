@@ -3,6 +3,7 @@ package afc.sportsapp.activity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -19,6 +20,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,11 +31,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
 import afc.sportsapp.R;
 import afc.sportsapp.auth.NormalAuth;
+import afc.sportsapp.model.IDData;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -313,6 +325,28 @@ public class AuthActivity extends AppCompatActivity implements LoaderCallbacks<C
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
 
+
+            String result = null;
+
+            try {
+                //TODO LOGIN TO ****ING DATABASE, SEND USERNAME AND PASSWORD
+
+            }
+            catch(Exception e){
+                return false;
+            }
+
+
+            if(result != null && result.contains("1")) {
+                IDData.setUserId(1);
+                return true;
+
+            }
+            Log.e("LOGIN", result);
+
+
+
+            /*
             try {
                 // Simulate network access.
                 Thread.sleep(2000);
@@ -327,9 +361,9 @@ public class AuthActivity extends AppCompatActivity implements LoaderCallbacks<C
                     return pieces[1].equals(mPassword);
                 }
             }
-
-            // TODO: register the new account here.
-            return true;
+            */
+            // TODO: register the new account here. not supported for now
+            return false;
         }
 
         @Override
@@ -338,6 +372,7 @@ public class AuthActivity extends AppCompatActivity implements LoaderCallbacks<C
             showProgress(false);
 
             if (success) {
+                startActivity(new Intent(AuthActivity.this, ProfileActivity.class));
                 finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
